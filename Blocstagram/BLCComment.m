@@ -1,0 +1,14 @@
+//
+//  BLCComment.m
+//  Blocstagram
+//
+//  Created by Edward Heywood on 22/03/2015.
+//  Copyright (c) 2015 Edward Heywood. All rights reserved.
+//
+
+#import "BLCComment.h"
+#import "BLCUser.h"
+
+@implementation BLCComment
+
+@end
