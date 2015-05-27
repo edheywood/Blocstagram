@@ -11,6 +11,7 @@
 #import "BLCMedia.h"
 #import "BLCComment.h"
 #import "BLCLoginViewController.h"
+#import <UICKeyChainStore.h>
 
 @interface BLCDataSource () {
     NSMutableArray *_mediaItems;
@@ -42,7 +43,14 @@
     self = [super init];
     
     if (self) {
-        [self registerForAccessTokenNotification];
+        self.accessToken = [UICKeyChainStore stringForKey:@"access token"];
+        
+        if (!self.accessToken) {
+            
+            [self registerForAccessTokenNotification];
+        } else {
+            
+        }
     }
     
     return self;
@@ -51,6 +59,7 @@
 - (void) registerForAccessTokenNotification {
     [[NSNotificationCenter defaultCenter] addObserverForName:BLCLoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         self.accessToken = note.object;
+        [UICKeyChainStore setString:self.accessToken forKey:@"access token"];
         
         // Got a token, populate the initial data
         [self populateDataWithParameters:nil completionHandler:nil];
@@ -98,7 +107,13 @@
         self.isRefreshing = YES;
         
         NSString *minID = [[self.mediaItems firstObject] idNumber];
-        NSDictionary *parameters = @{@"min_id": minID};
+//        
+//        NSDictionary *parameters = @{@"min_id": minID};
+//        
+        NSDictionary *parameters = nil;
+        if (self.mediaItems.count) {
+            parameters = @{@"min_id": minID};
+        }
         
         [self populateDataWithParameters:parameters completionHandler:^(NSError *error) {
             self.thereAreNoMoreOlderMessages = NO;
@@ -228,6 +243,25 @@
         [self didChangeValueForKey:@"mediaItems"];
     }
     
+    if (tmpMediaItems.count > 0) {
+        // Write the changes to disk
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSUInteger numberOfItemsToSave = MIN(self.mediaItems.count, 50);
+            NSArray *mediaItemsToSave = [self.mediaItems subarrayWithRange:NSMakeRange(0, numberOfItemsToSave)];
+            
+            NSString *fullPath = [self pathForFilename:NSStringFromSelector(@selector(mediaItems))];
+            NSData *mediaItemData = [NSKeyedArchiver archivedDataWithRootObject:mediaItemsToSave];
+            
+            NSError *dataError;
+            BOOL wroteSuccessfully = [mediaItemData writeToFile:fullPath options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&dataError];
+            
+            if (!wroteSuccessfully) {
+                NSLog(@"Couldn't write file: %@", dataError);
+            }
+        });
+        
+    }
+    
 }
 
 #pragma mark - Download Images from Instagram
@@ -247,17 +281,26 @@
                 if (image) {
                     mediaItem.image = image;
                     
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
-                        NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
-                        [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
-                    });
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+//                        NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+//                        [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
+//                    });
                 }
             } else {
                 NSLog(@"Error downloading image: %@", error);
             }
         });
     }
+}
+
+#pragma mark - Save to Disk
+
+- (NSString *) pathForFilename:(NSString *) filename {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths firstObject];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:filename];
+    return dataPath;
 }
 
 

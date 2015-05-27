@@ -10,6 +10,9 @@
 #import "BLCImagesTableViewController.h"
 #import "BLCLoginViewController.h"
 #import "BLCDataSource.h"
+#import "BLCMedia.h"
+#import <UICKeyChainStore/UICKeyChainStore.h>
+
 
 @interface AppDelegate ()
 
@@ -20,12 +23,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     
     [BLCDataSource sharedInstance]; // create the data source (so it can receive the access token notification)
     
     UINavigationController *navVC = [[UINavigationController alloc] init];
+    
+    if (![BLCDataSource sharedInstance].accessToken) {
     BLCLoginViewController *loginVC = [[BLCLoginViewController alloc] init];
     [navVC setViewControllers:@[loginVC] animated:YES];
     
@@ -33,6 +40,11 @@
         BLCImagesTableViewController *imagesVC = [[BLCImagesTableViewController alloc] init];
         [navVC setViewControllers:@[imagesVC] animated:YES];
     }];
+    
+    } else {
+        BLCImagesTableViewController *imagesVC = [[BLCImagesTableViewController alloc] init];
+        [navVC setViewControllers:@[imagesVC] animated:YES];
+    }
     
     self.window.rootViewController = navVC;
     
@@ -63,6 +75,54 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+- (void)                application:(UIApplication *)application
+  performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    [BLCDataSource sharedInstance];
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+    
+    NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"https://api.instagram.com/v1/users/self/feed?access_token=%@", [UICKeyChainStore stringForKey:@"access token"]]];
+    NSURLSessionDataTask *task = [session dataTaskWithURL:url
+                                        completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                            
+                                            NSError *errorJSON;
+                                            NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&errorJSON];
+                                            
+                                            if (error) {
+                                                completionHandler(UIBackgroundFetchResultFailed);
+                                                return;
+                                            }
+                                            
+                                            // Parse response/data and determine whether new content was available
+                                            BOOL hasNewData = YES;
+                                        
+                                            NSString *olderHigherIdNumber = @"0";
+                                            if ([BLCDataSource sharedInstance].mediaItems.count > 0)
+                                            {
+                                                olderHigherIdNumber = ((BLCMedia *)[[BLCDataSource sharedInstance].mediaItems firstObject]).idNumber;
+                                            }
+                                            
+                                            NSString *newerHigherIdNumber = @"0";
+                                            if (((NSArray *)responseDictionary[@"data"]).count > 0)
+                                            {
+                                                newerHigherIdNumber = ((NSDictionary *)[((NSArray *)responseDictionary[@"data"]) firstObject])[@"id"];
+                                            }
+                                            
+                                            hasNewData = [newerHigherIdNumber compare:olderHigherIdNumber] == NSOrderedDescending;
+                                            if (hasNewData) {
+                                                [[BLCDataSource sharedInstance] parseDataFromFeedDictionary:responseDictionary fromRequestWithParameters:nil];
+                                                completionHandler(UIBackgroundFetchResultNewData);
+                                            } else {
+                                                completionHandler(UIBackgroundFetchResultNoData);
+                                            };
+                                        }];
+    
+    // Start the task
+    [task resume];
 }
 
 @end
