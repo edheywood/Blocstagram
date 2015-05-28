@@ -91,9 +91,8 @@ NSString *const BLCLoginViewControllerDidGetAccessTokenNotification = @"BLCLogin
 
 //Perform action on back Button
 - (void) goBack {    // Go back task over-here
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.webView goBack];
     
-    //NOT WORKING CURRENTLY TO GO BACK
 }
 
 @end
