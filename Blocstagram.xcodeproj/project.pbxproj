@@ -31,6 +31,8 @@
 		277FA4F31ABF7ED7007C3708 /* BLCDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 277FA4F21ABF7ED7007C3708 /* BLCDataSource.m */; };
 		380F1EDE576D254C7023ECDF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D5198EFE13C6DE3525D5075 /* libPods.a */; };
 		641179071B0BB44B004339EE /* BLCMediaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 641179061B0BB44B004339EE /* BLCMediaTableViewCell.m */; };
+		6488C5C61B175B9400737380 /* BLCMediaFullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6488C5C51B175B9400737380 /* BLCMediaFullScreenViewController.m */; };
+		6488C5C91B176B9F00737380 /* BLCMediaFullScreenAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6488C5C81B176B9F00737380 /* BLCMediaFullScreenAnimator.m */; };
 		649538971B0E33AB00DFD894 /* BLCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 649538961B0E33AB00DFD894 /* BLCLoginViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +82,10 @@
 		277FA4F21ABF7ED7007C3708 /* BLCDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCDataSource.m; sourceTree = "<group>"; };
 		641179051B0BB44B004339EE /* BLCMediaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCMediaTableViewCell.h; sourceTree = "<group>"; };
 		641179061B0BB44B004339EE /* BLCMediaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCMediaTableViewCell.m; sourceTree = "<group>"; };
+		6488C5C41B175B9400737380 /* BLCMediaFullScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCMediaFullScreenViewController.h; sourceTree = "<group>"; };
+		6488C5C51B175B9400737380 /* BLCMediaFullScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCMediaFullScreenViewController.m; sourceTree = "<group>"; };
+		6488C5C71B176B9F00737380 /* BLCMediaFullScreenAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCMediaFullScreenAnimator.h; sourceTree = "<group>"; };
+		6488C5C81B176B9F00737380 /* BLCMediaFullScreenAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCMediaFullScreenAnimator.m; sourceTree = "<group>"; };
 		649538951B0E33AB00DFD894 /* BLCLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCLoginViewController.h; sourceTree = "<group>"; };
 		649538961B0E33AB00DFD894 /* BLCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCLoginViewController.m; sourceTree = "<group>"; };
 		8D5198EFE13C6DE3525D5075 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -129,27 +135,12 @@
 		277FA4A91ABEF466007C3708 /* Blocstagram */ = {
 			isa = PBXGroup;
 			children = (
-				277FA4AE1ABEF466007C3708 /* AppDelegate.h */,
-				277FA4AF1ABEF466007C3708 /* AppDelegate.m */,
-				277FA4B11ABEF466007C3708 /* ViewController.h */,
-				277FA4B21ABEF466007C3708 /* ViewController.m */,
-				277FA4E51ABF2C97007C3708 /* BLCImagesTableViewController.h */,
-				277FA4E61ABF2C97007C3708 /* BLCImagesTableViewController.m */,
-				641179051B0BB44B004339EE /* BLCMediaTableViewCell.h */,
-				641179061B0BB44B004339EE /* BLCMediaTableViewCell.m */,
-				277FA4E81ABF7457007C3708 /* BLCUser.h */,
-				277FA4E91ABF7457007C3708 /* BLCUser.m */,
-				277FA4EB1ABF76E1007C3708 /* BLCMedia.h */,
-				277FA4EC1ABF76E1007C3708 /* BLCMedia.m */,
-				277FA4EE1ABF7E6C007C3708 /* BLCComment.h */,
-				277FA4EF1ABF7E6C007C3708 /* BLCComment.m */,
-				277FA4F11ABF7ED7007C3708 /* BLCDataSource.h */,
-				277FA4F21ABF7ED7007C3708 /* BLCDataSource.m */,
-				277FA4B41ABEF466007C3708 /* Main.storyboard */,
-				649538951B0E33AB00DFD894 /* BLCLoginViewController.h */,
-				649538961B0E33AB00DFD894 /* BLCLoginViewController.m */,
-				277FA4B71ABEF466007C3708 /* Images.xcassets */,
-				277FA4B91ABEF466007C3708 /* LaunchScreen.xib */,
+				6488C5CB1B176BE100737380 /* App Delegate */,
+				6488C5CA1B176BC100737380 /* View Controllers */,
+				6488C5CD1B176C0F00737380 /* Table Cells */,
+				6488C5CE1B176C3A00737380 /* Data Types */,
+				6488C5D01B176C7000737380 /* Data Source */,
+				6488C5CF1B176C5900737380 /* Animations */,
 				277FA4D01ABF2BF3007C3708 /* Images */,
 				277FA4AA1ABEF466007C3708 /* Supporting Files */,
 			);
@@ -159,6 +150,9 @@
 		277FA4AA1ABEF466007C3708 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				277FA4B71ABEF466007C3708 /* Images.xcassets */,
+				277FA4B41ABEF466007C3708 /* Main.storyboard */,
+				277FA4B91ABEF466007C3708 /* LaunchScreen.xib */,
 				277FA4AB1ABEF466007C3708 /* Info.plist */,
 				277FA4AC1ABEF466007C3708 /* main.m */,
 			);
@@ -197,6 +191,70 @@
 				277FA4DA1ABF2C45007C3708 /* 10.jpg */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		6488C5CA1B176BC100737380 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				277FA4B11ABEF466007C3708 /* ViewController.h */,
+				277FA4B21ABEF466007C3708 /* ViewController.m */,
+				649538951B0E33AB00DFD894 /* BLCLoginViewController.h */,
+				649538961B0E33AB00DFD894 /* BLCLoginViewController.m */,
+				277FA4E51ABF2C97007C3708 /* BLCImagesTableViewController.h */,
+				277FA4E61ABF2C97007C3708 /* BLCImagesTableViewController.m */,
+				6488C5C41B175B9400737380 /* BLCMediaFullScreenViewController.h */,
+				6488C5C51B175B9400737380 /* BLCMediaFullScreenViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		6488C5CB1B176BE100737380 /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				277FA4AE1ABEF466007C3708 /* AppDelegate.h */,
+				277FA4AF1ABEF466007C3708 /* AppDelegate.m */,
+			);
+			name = "App Delegate";
+			sourceTree = "<group>";
+		};
+		6488C5CD1B176C0F00737380 /* Table Cells */ = {
+			isa = PBXGroup;
+			children = (
+				641179051B0BB44B004339EE /* BLCMediaTableViewCell.h */,
+				641179061B0BB44B004339EE /* BLCMediaTableViewCell.m */,
+			);
+			name = "Table Cells";
+			sourceTree = "<group>";
+		};
+		6488C5CE1B176C3A00737380 /* Data Types */ = {
+			isa = PBXGroup;
+			children = (
+				277FA4E81ABF7457007C3708 /* BLCUser.h */,
+				277FA4E91ABF7457007C3708 /* BLCUser.m */,
+				277FA4EB1ABF76E1007C3708 /* BLCMedia.h */,
+				277FA4EC1ABF76E1007C3708 /* BLCMedia.m */,
+				277FA4EE1ABF7E6C007C3708 /* BLCComment.h */,
+				277FA4EF1ABF7E6C007C3708 /* BLCComment.m */,
+			);
+			name = "Data Types";
+			sourceTree = "<group>";
+		};
+		6488C5CF1B176C5900737380 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				6488C5C71B176B9F00737380 /* BLCMediaFullScreenAnimator.h */,
+				6488C5C81B176B9F00737380 /* BLCMediaFullScreenAnimator.m */,
+			);
+			name = Animations;
+			sourceTree = "<group>";
+		};
+		6488C5D01B176C7000737380 /* Data Source */ = {
+			isa = PBXGroup;
+			children = (
+				277FA4F11ABF7ED7007C3708 /* BLCDataSource.h */,
+				277FA4F21ABF7ED7007C3708 /* BLCDataSource.m */,
+			);
+			name = "Data Source";
 			sourceTree = "<group>";
 		};
 		B12DC122D6FC2C018D33F2A3 /* Pods */ = {
@@ -367,10 +425,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				277FA4B31ABEF466007C3708 /* ViewController.m in Sources */,
+				6488C5C61B175B9400737380 /* BLCMediaFullScreenViewController.m in Sources */,
 				277FA4B01ABEF466007C3708 /* AppDelegate.m in Sources */,
 				641179071B0BB44B004339EE /* BLCMediaTableViewCell.m in Sources */,
 				277FA4ED1ABF76E1007C3708 /* BLCMedia.m in Sources */,
 				277FA4AD1ABEF466007C3708 /* main.m in Sources */,
+				6488C5C91B176B9F00737380 /* BLCMediaFullScreenAnimator.m in Sources */,
 				277FA4E71ABF2C97007C3708 /* BLCImagesTableViewController.m in Sources */,
 				277FA4EA1ABF7457007C3708 /* BLCUser.m in Sources */,
 				277FA4F31ABF7ED7007C3708 /* BLCDataSource.m in Sources */,
