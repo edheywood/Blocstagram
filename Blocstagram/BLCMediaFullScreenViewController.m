@@ -159,8 +159,8 @@
 
 -(void)shareIt {
     
-    BLCComment *comment = [[BLCComment alloc] init];
-    BLCComment.data =
+//    BLCComment *comment = [[BLCComment alloc] init];
+//    BLCComment.data =
     
     
     NSString * message = @"hi";
@@ -168,10 +168,10 @@
     NSArray *shareItems = [NSArray arrayWithObjects: @[message, anImage], nil];
 //
     
-    - need to pull the data from instagram now and pipe it here
-                             
-//                            = [NSArray arrayWithObjects:  @"",
-////                        message, anImage, nil];
+//    - need to pull the data from instagram now and pipe it here
+//                             
+////                            = [NSArray arrayWithObjects:  @"",
+//////                        message, anImage, nil];
     
     UIActivityViewController *avc =
     [[UIActivityViewController alloc]

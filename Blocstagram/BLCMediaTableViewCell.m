@@ -11,12 +11,21 @@
 #import "BLCComment.h"
 #import "BLCUser.h"
 #import "BLCDataSource.h"
+#import "BLCLoginViewController.h"
+#import <UICKeyChainStore.h>
+#import <AFNetworking/AFNetworking.h>
 
 @interface BLCMediaTableViewCell () <UIGestureRecognizerDelegate>
+
+@property (nonatomic, strong) UITapGestureRecognizer *twoFingerTap;
+@property (nonatomic, strong) AFHTTPRequestOperationManager *instagramOperationManager;
+
 
 @end
 
 @implementation BLCMediaTableViewCell
+
+
 
 
 
@@ -70,6 +79,10 @@
         self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
         self.tapGestureRecognizer.delegate = self;
         [self.mediaImageView addGestureRecognizer:self.tapGestureRecognizer];
+        
+        self.twoFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewWasTappedWithTwoFingers:)];
+        self.twoFingerTap.numberOfTouchesRequired = 2;
+        [self.mediaImageView addGestureRecognizer:self.twoFingerTap];
         
         self.longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFired:)];
         self.longPressGestureRecognizer.delegate = self;
@@ -223,6 +236,26 @@
 - (void) tapFired:(UITapGestureRecognizer *)sender {
     [self.delegate cell:self didTapImageView:self.mediaImageView];
 }
+                                                   
+- (void) viewWasTappedWithTwoFingers:(UITapGestureRecognizer *)sender {
+    if (_mediaItem.mediaURL && !_mediaItem.image) {
+        [self.instagramOperationManager GET:_mediaItem.mediaURL.absoluteString
+                                 parameters:nil
+                                    success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                        if ([responseObject isKindOfClass:[UIImage class]]) {
+                                            _mediaItem.image = responseObject;
+                                            NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+                                            NSUInteger index = [mutableArrayWithKVO indexOfObject:_mediaItem];
+                                            [mutableArrayWithKVO replaceObjectAtIndex:index withObject:_mediaItem];
+                                        }
+                                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                        NSLog(@"Error downloading image: %@", error);
+                                    }];
+
+//    [self.delegate cell:self didTapImageView:self.mediaImageView];
+    }
+    
+}
 
 - (void) longPressFired:(UILongPressGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateBegan) {
@@ -236,7 +269,5 @@
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     return self.isEditing == NO;
 }
-
-
 
 @end
