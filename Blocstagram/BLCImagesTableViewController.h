@@ -13,3 +13,7 @@
 @property (nonatomic, strong) NSMutableArray *items;
 
 @end
+
+
+NSMutableDictionary *Dict_name;
+BOOL isDragging, isDecelerating;
