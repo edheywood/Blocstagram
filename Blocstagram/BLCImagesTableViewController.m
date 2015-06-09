@@ -18,6 +18,7 @@
   @interface BLCImagesTableViewController () <BLCMediaTableViewCellDelegate, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, weak) UIImageView *lastTappedImageView;
+@property(nonatomic) CGFloat decelerationRate;
 
 @end
 
@@ -78,9 +79,18 @@
     BLCMediaTableViewCell *cellNew = [tableView dequeueReusableCellWithIdentifier:@"mediaCell" forIndexPath:indexPath];
     cellNew.delegate = self;
     cellNew.mediaItem = [BLCDataSource sharedInstance].mediaItems[indexPath.row];
-    
     return cellNew;
 }
+
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    BLCMedia *mediaItem = [BLCDataSource sharedInstance].mediaItems[indexPath.row];
+//    if (mediaItem.downloadState == BLCMediaDownloadStateNeedsImage) {
+//        [[BLCDataSource sharedInstance] downloadImageForMediaItem:mediaItem];
+//    }
+}
+
+
+
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     BLCMedia *item = [BLCDataSource sharedInstance].mediaItems[indexPath.row];
@@ -186,13 +196,37 @@
     //ensure that the end of scroll is fired.
     [self performSelector:@selector(scrollViewDidEndScrollingAnimation:) withObject:sender afterDelay:0.3];
     [self infiniteScrollIfNecessary];
-    
+
+    for (BLCMediaTableViewCell *cell in self.tableView.visibleCells)
+        {
+        
+            NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+            BLCMedia *mediaItem = [BLCDataSource sharedInstance].mediaItems[indexPath.row];
+            if (mediaItem.downloadState == BLCMediaDownloadStateNeedsImage) {
+                [[BLCDataSource sharedInstance] downloadImageForMediaItem:mediaItem];
+            }
+
+        }
 }
 
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self infiniteScrollIfNecessary];
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+    
+    for (BLCMediaTableViewCell *cell in self.tableView.visibleCells)
+        {
+            
+            NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+            BLCMedia *mediaItem = [BLCDataSource sharedInstance].mediaItems[indexPath.row];
+            if (mediaItem.downloadState == BLCMediaDownloadStateNeedsImage) {
+                [[BLCDataSource sharedInstance] downloadImageForMediaItem:mediaItem];
+            }
+        }
 }
 
 #pragma mark - BLCMediaTableViewCellDelegate

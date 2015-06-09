@@ -9,6 +9,7 @@
 #import "BLCMediaFullScreenViewController.h"
 #import "BLCMedia.h"
 #import "BLCComment.h"
+#import "BLCImagesTableViewController.h"
 
 
 @interface BLCMediaFullScreenViewController () <UIScrollViewDelegate>
@@ -158,26 +159,9 @@
 #pragma mark - Sharing
 
 -(void)shareIt {
-    
-//    BLCComment *comment = [[BLCComment alloc] init];
-//    BLCComment.data =
-    
-    
-    NSString * message = @"hi";
-    UIImage *anImage = [UIImage imageNamed:@"1.jpg"];
-    NSArray *shareItems = [NSArray arrayWithObjects: @[message, anImage], nil];
-//
-    
-//    - need to pull the data from instagram now and pipe it here
-//                             
-////                            = [NSArray arrayWithObjects:  @"",
-//////                        message, anImage, nil];
-    
-    UIActivityViewController *avc =
-    [[UIActivityViewController alloc]
-     initWithActivityItems:shareItems applicationActivities:nil];
-    [self presentViewController:avc animated:YES completion:nil];
-    
+    NSArray *itemsToShare = @[self.media.caption, self.media.image];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+    [self presentViewController:activityVC animated:YES completion:nil];
 }
 
 @end
